@@ -21,7 +21,7 @@ library(igraph)
 timeformat <- "%Y-%m-%d-%H"
 
 #Bitte legen Sie an dieser Stelle den Pfad fest, unter welchem die Abbildungen der sozialen Netzwerke gespeichert werden sollen.
-image_path <- "C:/xampp/htdocs/wikiwm2012/images/collaboration_plots/"
+image_path <- "/path_to_wiki/images/collaboration_plots/"
 
 #Die einzelnen Parameter der Kalibrierung lassen sich beliebig modifizieren.
 #Bitte passen Sie die nachfolgenden Variablen entsprechend Ihren Bedürfnissen an.
@@ -61,7 +61,7 @@ den3_calibrate_to    <- 1
 #User: Datenbanknutzer
 #Password: Passwort des Datenbanknutzers
 #Dbname: Datenbank, in welcher sich sämtliche Tabellen von MediaWiki befinden.
-con <- dbConnect(MySQL(), user="root", password="", dbname="wikiwm2012", host="localhost" )
+con <- dbConnect(MySQL(), user="", password="", dbname="", host="localhost" )
 
 #SQL-Statement, um die definierten Gruppennummern abzufragen.
 sql_groups <- paste ("SELECT DISTINCT user_wiki_group FROM `user` WHERE user_wiki_group IS NOT NULL ORDER BY user_wiki_group ASC")

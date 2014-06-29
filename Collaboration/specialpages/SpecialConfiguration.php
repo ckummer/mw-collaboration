@@ -3,7 +3,7 @@ class SpecialConfiguration extends SpecialPage {
         function __construct() {
 				//Dieser Befehl lädt das Grundgerüst einer SpecialPage. Der Name der SpecialPage wird geändert und es kann ein Recht zur Beschränkung des Zugriffs vergeben werden.
 				//Um den Zugriff auf die Seite nur für System-Operatoren zu gewähren, ist die Zeile parent::__construct um den Parameter 'sysop' zu ergänzen.
-                parent::__construct( 'Configuration', 'sysop' );
+				parent::__construct( 'Configuration', 'ttcollaboration' );
         }
  
         function execute( $par ) {

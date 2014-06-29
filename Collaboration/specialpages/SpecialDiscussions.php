@@ -3,12 +3,12 @@ class SpecialDiscussions extends SpecialPage {
         function __construct() {
 			//Dieser Befehl lädt das Grundgerüst einer SpecialPage. Der Name der SpecialPage wird geändert und es kann ein Recht zur Beschränkung des Zugriffs vergeben werden.
 			//Um den Zugriff auf die Seite nur für System-Operatoren zu gewähren, ist die Zeile parent::__construct um den Parameter 'sysop' zu ergänzen.
-            parent::__construct( 'Discussions', 'sysop' );
+            parent::__construct( 'Discussions', 'ttcollaboration' );
         }
 		
 		function execute( $par ) {
 			//Definition globaler Systemvariablen und weiterer Variablen, welche im weiteren Skript benötigt werden.
-			global $wgOut, $wgRequest, $wgDBname;
+			global $wgOut, $wgRequest, $wgScriptPath;
 			global $res_group_time, $res_group_time1, $row_start_time, $row_end_time;
 			$selected_group = "";
 			$checkbox_inactivity = "";
@@ -181,7 +181,7 @@ class SpecialDiscussions extends SpecialPage {
 					$user_name_link = str_replace(' ', '_', $row_user_new->user_name);
 					
 					$wgOut->addHTML ("<tr><td>" .
-					$row_user_new->user_id . "</td><td><a href='/". $wgDBname ."/index.php/User:". $user_name_link ."' title='User:". $user_name_link ."'>" .
+					$row_user_new->user_id . "</td><td><a href='". $wgScriptPath ."/index.php/User:". $user_name_link ."' title='User:". $user_name_link ."'>" .
 					$row_user_new->user_name . "</a></td><td>" .
 					$row_user_new->user_real_name . "</td>". 
 					"<td><input name='user_inactivity". $row_user_new->user_id ."' type='checkbox' disabled ". $checkbox_inactivity ."></td></tr>");
@@ -202,11 +202,11 @@ class SpecialDiscussions extends SpecialPage {
 					//Ausgabe der diskutierten Seiten und Nutzer, welche auf diesen Seiten kommentiert haben.
 					for($j=1; $j <= count($array_compare_pages); $j++){
 						if($j==1){
-							$wgOut->addHTML("<tr><td><a href='/". $wgDBname ."/index.php?title=-&curid=". $array_compare_pages[$j] ."' title='Page:". $array_compare_pages[$j] ."'>".$array_compare_pages[$j]."</a></td><td>". $array_user[$j] ."</td></tr>");
+							$wgOut->addHTML("<tr><td><a href='". $wgScriptPath ."/index.php?title=-&curid=". $array_compare_pages[$j] ."' title='Page:". $array_compare_pages[$j] ."'>".$array_compare_pages[$j]."</a></td><td>". $array_user[$j] ."</td></tr>");
 						}
 						else{
 							if($array_compare_pages[$j]!=$array_compare_pages[$j-1]){
-								$wgOut->addHTML("<tr><td colspan='6'><hr></td></tr><tr><td><a href='/". $wgDBname ."/index.php?title=-&curid=". $array_compare_pages[$j] ."' title='Page:". $array_compare_pages[$j] ."'>".$array_compare_pages[$j]."</a></td><td>". $array_user[$j] ."</td></tr>");
+								$wgOut->addHTML("<tr><td colspan='6'><hr></td></tr><tr><td><a href='". $wgScriptPath ."/index.php?title=-&curid=". $array_compare_pages[$j] ."' title='Page:". $array_compare_pages[$j] ."'>".$array_compare_pages[$j]."</a></td><td>". $array_user[$j] ."</td></tr>");
 							}
 							else{
 								$wgOut->addHTML("<tr><td></td><td>". $array_user[$j] ."</td></tr>");

@@ -1,49 +1,32 @@
 <?php
 class SpecialCollaboration extends SpecialPage {
         function __construct() {
-				//Dieser Befehl lädt das Grundgerüst einer SpecialPage. Der Name der SpecialPage wird geändert und es kann ein Recht zur Beschränkung des Zugriffs vergeben werden.
-				//Um den Zugriff auf die Seite nur für System-Operatoren zu gewähren, ist die Zeile parent::__construct um den Parameter 'sysop' zu ergänzen.
-                parent::__construct( 'Collaboration', 'sysop' );
+				// restrict access to sysops
+				parent::__construct( 'Collaboration', 'ttcollaboration' );
         }
  
         function execute( $par ) {
-				//Definition globaler Systemvariablen
-				global $wgOut, $wgRequest, $wgDBname;
-
-				//An dieser Stelle werden die Dateipfade hinterlegt, unter denen benötigte Bilddateien zu finden sind bzw. abgespeichert werden.
-				//$image_path beschreibt den Pfad zu den Ampelbildern, welche als Veranschaulichung des Kollaborationsstatusses dienen.
-				//$network_path beschreibt den Pfad, unter dem die graphische Veranschaulichung der sozialen Netzwerke zu finden sind.
-				//Beide Pfade sind anzupassen.
-				$image_path = '/'.$wgDBname.'/extensions/Collaboration/traffic_lights/';
-				$network_path = '/'.$wgDBname.'/images/collaboration_plots/';
+				global $wgOut, $wgRequest, $wgScriptPath;
 				
-				//Variable, welche hilft, die Kennzahlen korrekt darzustellen.
-				$kpi_help = 1;
-				
-				$checkbox_inactivity = "";
-				
-				//Trotz Vergabe der Zugriffsbeschränkung, kann ein User einer Gruppe ohne die entsprechende Berechtigung über den direkten Link auf diese SpecialPage zugreifen.
-				//Wird nur verwendet, wenn der Parameter 'sysop' im Constructor vergeben wurde.
+				// restrict url access
 				if (  !$this->userCanExecute( $this->getUser() )  ) {
 					$this->displayRestrictionError();
 					return;
 				}
 				
-				//Seitentitel wird ermittelt und auf der SpecialPage eingefügt.
+				// TODO: Sinnhaftigkeit der Variablen
+				$image_path = $wgScriptPath . '/extensions/Collaboration/traffic_lights/';
+				$network_path = $wgScriptPath . '/images/collaboration_plots/';
+				$kpi_help = 1;
+				$checkbox_inactivity = "";
+				
 				$self = $this->getTitle();
                 $this->setHeaders();
 				
-				//wfGetDB ( DB_SLAVE ) definiert einen lesenden Datenbankzugriff.	
 				$dbr =& wfGetDB( DB_SLAVE );
 				
-				//SQL-Abfrage um die maximale Gruppennummer zu ermitteln.
+				// SQL Abfrage um die maximale Gruppennummer zu ermitteln.
 				$res_max_group = $dbr->select( 'user', 'MAX(user_wiki_group) as maximum_group');
-				
-				$wgOut->addHTML ("<p>Diese Seite dient der Visualisierung von Kollaboration im Wiki. <br>
-							      Es wird für jede Gruppe im Wiki die vorhandene Kollaboration veranschaulicht und die im Vorfeld berechneten Werte werden angezeigt.</p>
-								  <p>Sollten Sie Fragen zu den hier dargestellten Kennzahlen haben, so können Sie die Bedeutung auf der SpecialPage mit den <a href='/". $wgDBname ."/index.php/Special:Collaboration_-_Frequently_Asked_Questions' title='CollaborationFAQ'>Frequently Asked Questions</a> zur Wiki-Extension Collaboration nachlesen. Auf dieser Seite finden Sie auch Informationen darüber, wie die Visualisierungen der sozialen Netzwerke zu interpretieren ist.</p>");
-				
-				//Definierte SQL-Abfrage wird an die Datenbank gesendet und Rückgabewert wird auf Variable geschrieben.
 				$row = $dbr->fetchObject( $res_max_group );
 				
 				//SQL-Abfrage, um anschließend zu testen, ob es Kollaborationswerte gibt
@@ -123,7 +106,7 @@ class SpecialCollaboration extends SpecialPage {
 							$user_name_link = str_replace(' ', '_', $row_user_new->user_name);
 							
 							$wgOut->addHTML ("<tr><td>" .
-							$row_user_new->user_id . "</td><td><a href='/". $wgDBname ."/index.php/User:". $user_name_link ."' title='User:". $user_name_link ."'>" .
+							$row_user_new->user_id . "</td><td><a href='". $wgScriptPath ."/index.php/User:". $user_name_link ."' title='User:". $user_name_link ."'>" .
 							$row_user_new->user_name . "</a></td><td>" .
 							$row_user_new->user_real_name . "</td>". 
 							"<td align='center'><input name='user_inactivity". $row_user_new->user_id ."' type='checkbox' disabled ". $checkbox_inactivity ."></td>" . $kennzahl ."</tr>");

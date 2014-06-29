@@ -3,12 +3,12 @@ class SpecialComparison extends SpecialPage {
         function __construct() {
 				//Dieser Befehl lädt das Grundgerüst einer SpecialPage. Der Name der SpecialPage wird geändert und es kann ein Recht zur Beschränkung des Zugriffs vergeben werden.
 				//Um den Zugriff auf die Seite nur für System-Operatoren zu gewähren, ist die Zeile parent::__construct um den Parameter 'sysop' zu ergänzen.
-                parent::__construct( 'Comparison', 'sysop' );
+                parent::__construct( 'Comparison', 'ttcollaboration' );
         }
  
         function execute( $par ) {
 				//Definition globaler Systemvariablen und weiterer, welche im weiteren Skript benötigt werden.
-				global $wgOut, $wgRequest, $wgDBname;
+				global $wgOut, $wgRequest, $wgScriptPath;
 				global $res_group_time, $res_group_time1, $row_start_time, $row_end_time;
 				$selected_group = "";
 				$checkbox_inactivity = "";
@@ -17,8 +17,8 @@ class SpecialComparison extends SpecialPage {
 				//$image_path beschreibt den Pfad zu den Ampelbildern, welche als Veranschaulichung des Kollaborationsstatusses dienen.
 				//$network_path beschreibt den Pfad, unter dem die graphische Veranschaulichung der sozialen Netzwerke zu finden sind.
 				//Beide Pfade sind anzupassen.				
-				$image_path = '/'.$wgDBname.'/extensions/Collaboration/traffic_lights/';
-				$network_path = '/'.$wgDBname.'/images/collaboration_plots/';
+				$image_path = $wgScriptPath . '/extensions/Collaboration/traffic_lights/';
+				$network_path = $wgScriptPath . '/images/collaboration_plots/';
 				
 				//Trotz Vergabe der Zugriffsbeschränkung, kann ein User einer Gruppe ohne die entsprechende Berechtigung über den direkten Link auf diese SpecialPage zugreifen.
 				//Wird nur verwendet, wenn der Parameter 'sysop' im Constructor vergeben wurde.
@@ -55,8 +55,7 @@ class SpecialComparison extends SpecialPage {
 				$arrayEmptyness = $checkEmptyness->pa;				
 				
 				
-				$wgOut->addHTML ("<p>Diese Seite soll dazu dienen, den Kollaborationsstatus einer Gruppe zu zwei unterschiedlichen Zeitpunkten miteinander zu vergleichen.<br>
-								  Sollten Sie Fragen zu den hier dargestellten Kennzahlen haben, so können Sie die Bedeutung auf der SpecialPage mit den <a href='/". $wgDBname ."/index.php/Special:Collaboration_-_Frequently_Asked_Questions' title='CollaborationFAQ'>Frequently Asked Questions</a> zur Wiki-Extension Collaboration nachlesen. Auf dieser Seite finden Sie auch Informationen darüber, wie die Visualisierungen der sozialen Netzwerke zu interpretieren ist.</p>
+				$wgOut->addHTML ("<p>Diese Seite soll dazu dienen, den Kollaborationsstatus einer Gruppe zu zwei unterschiedlichen Zeitpunkten miteinander zu vergleichen.</p>
 								  <p>Bitte wählen Sie hierfür zunächst eine Gruppe und anschließend zwei Zeitpunkte aus, zu welchen Sie den Status vergleichen möchten.</p>
 								  <p>Die Zeitauswahl ist dabei wie folgt zu interpretieren: Jahr-Monat-Tag-Uhrzeit(24h)</p>
 								  <p>Erscheinen nach der Gruppenauswahl keine selektierbaren Zeiten, so starten Sie bitte das R-Skript zur Ermittelung der Kollaborations-Kennzahlen.");
@@ -201,7 +200,7 @@ class SpecialComparison extends SpecialPage {
 						$user_name_link = str_replace(' ', '_', $row_user_new->user_name);
 					
 						$wgOut->addHTML ("<tr><td>" .
-						$row_user_new->user_id . "</td><td><a href='/". $wgDBname ."/index.php/User:". $user_name_link ."' title='User:". $user_name_link ."'>" .
+						$row_user_new->user_id . "</td><td><a href='". $wgScriptPath ."/index.php/User:". $user_name_link ."' title='User:". $user_name_link ."'>" .
 						$row_user_new->user_name . "</a></td><td>" .
 						$row_user_new->user_real_name . "</td>". 
 						"<td><input name='user_inactivity". $row_user_new->user_id ."' type='checkbox' disabled ". $checkbox_inactivity ."></td></tr>");
